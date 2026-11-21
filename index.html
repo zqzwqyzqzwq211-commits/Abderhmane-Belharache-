@@ -1,631 +1,459 @@
 
 <div id="quizApp">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
-
-    #quizApp {
-      font-family: Cairo, sans-serif;
-      color: white;
-      direction: rtl;
-      max-width: 500px;
-      margin: 15px auto;
-      padding: 22px;
-      background: #151b31;
-      border: 1px solid #39466f;
-      border-radius: 25px;
-      box-shadow: 0 15px 50px #0005;
-      min-height: 620px;
-    }
-
-    #quizApp * { box-sizing: border-box; }
-
-    #quizApp header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #ffffff20;
-      padding-bottom: 18px;
-    }
-
-    #quizApp .brand {
-      font-size: 19px;
-      font-weight: 900;
-      direction: ltr;
-    }
-
-    #quizApp .brand span { color: #929cff; }
-
-    #quizApp .online {
-      color: #45d69b;
-      font-size: 12px;
-    }
-
-    #quizApp .screen {
-      display: none;
-      padding-top: 25px;
-      animation: quizShow .3s ease;
-    }
-
-    #quizApp .screen.active { display: block; }
-
-    @keyframes quizShow {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    #quizApp .hero {
-      font-size: 65px;
-      text-align: center;
-      margin: 15px;
-    }
-
-    #quizApp h1 {
-      text-align: center;
-      font-size: 29px;
-      line-height: 1.6;
-      margin: 8px 0;
-      color: white;
-    }
-
-    #quizApp h1 span { color: #929cff; }
-
-    #quizApp p {
-      text-align: center;
-      color: #aab5d2;
-      line-height: 2;
-      font-size: 13px;
-    }
-
-    #quizApp .label {
-      font-size: 14px;
-      margin: 25px 0 12px;
-      font-weight: bold;
-    }
-
-    #quizApp .levels {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 9px;
-    }
-
-    #quizApp .level {
-      background: #222d4b;
-      border: 1px solid #ffffff20;
-      border-radius: 13px;
-      padding: 12px 3px;
-      color: white;
-      font-family: inherit;
-    }
-
-    #quizApp .level.selected {
-      border: 2px solid #929cff;
-      background: #303c6c;
-    }
-
-    #quizApp .level b,
-    #quizApp .level small {
-      display: block;
-    }
-
-    #quizApp .level small {
-      font-size: 10px;
-      color: #aab5d2;
-    }
-
-    #quizApp button { cursor: pointer; }
-
-    #quizApp .primary {
-      width: 100%;
-      padding: 14px;
-      margin-top: 20px;
-      border: 0;
-      border-radius: 13px;
-      color: white;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 800;
-      background: linear-gradient(110deg,#6274f5,#9459df);
-    }
-
-    #quizApp button:disabled {
-      opacity: .4;
-      cursor: not-allowed;
-    }
-
-    #quizApp .features {
-      display: flex;
-      justify-content: space-around;
-      margin: 25px 0 5px;
-      font-size: 11px;
-      color: #aab5d2;
-    }
-
-    #quizApp .stats {
-      display: flex;
-      justify-content: space-between;
-      gap: 7px;
-      margin: 20px 0;
-    }
-
-    #quizApp .stat {
-      flex: 1;
-      text-align: center;
-      padding: 10px 3px;
-      border-radius: 12px;
-      background: #252f50;
-    }
-
-    #quizApp .stat small,
-    #quizApp .stat strong {
-      display: block;
-    }
-
-    #quizApp .stat small {
-      color: #aab5d2;
-      font-size: 10px;
-    }
-
-    #quizApp .stat strong { color: #a6b0ff; }
-
-    #quizApp .progress {
-      height: 7px;
-      background: #303a5b;
-      border-radius: 20px;
-      overflow: hidden;
-      margin: 15px 0;
-    }
-
-    #quizApp #bar {
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg,#6978ff,#bd71ef);
-      transition: .3s;
-    }
-
-    #quizApp .timer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #252f50;
-      padding: 12px 17px;
-      border-radius: 13px;
-      margin: 18px 0;
-    }
-
-    #quizApp #clock {
-      color: #ffdc75;
-      font-size: 24px;
-      font-weight: 900;
-    }
-
-    #quizApp .question {
-      background: #29345d;
-      padding: 22px 15px;
-      border-radius: 16px;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    #quizApp .question small { color: #aeb9df; }
-
-    #quizApp #question {
-      font-size: 19px;
-      line-height: 1.8;
-    }
-
-    #quizApp .answers {
-      display: grid;
-      gap: 10px;
-    }
-
-    #quizApp .answer {
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #ffffff25;
-      background: #222d49;
-      color: white;
-      font-family: inherit;
-      font-size: 14px;
-      text-align: right;
-    }
-
-    #quizApp .answer.correct {
-      background: #16523e;
-      border-color: #42d69b;
-    }
-
-    #quizApp .answer.wrong {
-      background: #602b3b;
-      border-color: #ff718c;
-    }
-
-    #quizApp #feedback {
-      text-align: center;
-      min-height: 35px;
-      padding: 10px 0;
-      font-weight: bold;
-      font-size: 13px;
-    }
-
-    #quizApp .actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    #quizApp .actions button { flex: 1; }
-
-    #quizApp .skip {
-      background: #303b5b;
-      border: 1px solid #ffffff20;
-      color: white;
-      border-radius: 12px;
-      padding: 12px;
-      font-family: inherit;
-    }
-
-    #quizApp .result-card {
-      background: #28345e;
-      border: 1px solid #6975bd;
-      padding: 22px;
-      border-radius: 18px;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    #quizApp #finalScore {
-      color: #aab3ff;
-      font-size: 55px;
-      font-weight: 900;
-    }
-
-    #quizApp .result-grid {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 8px;
-    }
-
-    #quizApp .result-grid div {
-      background: #252f50;
-      border-radius: 12px;
-      padding: 12px 3px;
-      text-align: center;
-    }
-
-    #quizApp .result-grid strong,
-    #quizApp .result-grid small {
-      display: block;
-    }
-
-    #quizApp .result-grid strong {
-      font-size: 22px;
-      color: #aab3ff;
-    }
-
-    #quizApp .result-grid small {
-      font-size: 10px;
-      color: #aab5d2;
-    }
-
-    #quizApp .homeBtn {
-      width: 100%;
-      background: transparent;
-      color: #aab5d2;
-      border: 0;
-      padding: 15px;
-      font-family: inherit;
-    }
-
-    #quizApp footer {
-      text-align: center;
-      margin-top: 25px;
-      padding-top: 15px;
-      border-top: 1px solid #ffffff15;
-      color: #7785ac;
-      font-size: 10px;
-      direction: ltr;
-    }
-  </style>
-
-  <header>
-    <div class="brand">⚡ QUIZ<span>MASTER</span></div>
-    <div class="online">● ONLINE GAME</div>
-  </header>
-
-  <section id="home" class="screen active">
-    <div class="hero">🧠</div>
-    <h1>هل أنت مستعد<br><span>للتحدي؟</span></h1>
-    <p>اختبر ذكاءك واجمع النقاط وكن بطل المسابقة!</p>
-
-    <div class="label">اختر مستوى الصعوبة</div>
-
-    <div class="levels">
-      <button class="level selected" data-level="easy">
-        🟢 <b>سهل</b><small>للمبتدئين</small>
-      </button>
-      <button class="level" data-level="medium">
-        🟡 <b>متوسط</b><small>تحدٍ أكبر</small>
-      </button>
-      <button class="level" data-level="hard">
-        🔴 <b>صعب</b><small>للمحترفين</small>
-      </button>
-    </div>
-
-    <div class="features">
-      <span>❓ 10 أسئلة</span>
-      <span>⏱️ 15 ثانية</span>
-      <span>🏆 100 نقطة</span>
-    </div>
-
-    <button class="primary" id="start">ابدأ اللعب 🚀</button>
-  </section>
-
-  <section id="game" class="screen">
-    <div class="stats">
-      <div class="stat"><small>السؤال</small><strong id="count">1/10</strong></div>
-      <div class="stat"><small>النقاط</small><strong id="points">0</strong></div>
-      <div class="stat"><small>المستوى</small><strong id="levelText">سهل</strong></div>
-    </div>
-
-    <div class="progress"><div id="bar"></div></div>
-
-    <div class="timer">
-      <div><small>⏳ الوقت المتبقي</small><br>أسرع في الإجابة!</div>
-      <strong id="clock">15</strong>
-    </div>
-
-    <div class="question">
-      <small>❔ اختر الإجابة الصحيحة</small>
-      <h2 id="question">السؤال</h2>
-    </div>
-
-    <div class="answers" id="answers"></div>
-    <div id="feedback"></div>
-
-    <div class="actions">
-      <button class="skip" id="skip">تخطي ⏭</button>
-      <button class="primary" id="next" disabled>التالي ←</button>
-    </div>
-  </section>
-
-  <section id="result" class="screen">
-    <div class="hero" id="medal">🏆</div>
-    <h1 id="resultTitle">أحسنت!</h1>
-    <p id="resultMessage"></p>
-
-    <div class="result-card">
-      <small>مجموع نقاطك</small>
-      <div id="finalScore">0</div>
-      <small id="percentage">0%</small>
-    </div>
-
-    <div class="result-grid">
-      <div><strong id="correct">0</strong><small>صحيحة ✅</small></div>
-      <div><strong id="wrong">0</strong><small>خاطئة ❌</small></div>
-      <div><strong id="skipped">0</strong><small>متخطاة ⏭</small></div>
-    </div>
-
-    <button class="primary" id="replay">العب مرة أخرى 🔄</button>
-    <button class="homeBtn" id="homeBtn">العودة للرئيسية</button>
-  </section>
-
-  <footer>QUIZ MASTER • 2026</footer>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+#quizApp {
+  font-family:Cairo,sans-serif;
+  direction:rtl;
+  color:white;
+  max-width:520px;
+  margin:15px auto;
+  padding:20px;
+  min-height:650px;
+  border-radius:25px;
+  background:linear-gradient(145deg,#10172e,#202d50);
+  border:1px solid #5969a0;
+  box-shadow:0 20px 60px #0008;
+}
+#quizApp *{box-sizing:border-box}
+#quizApp button{font-family:inherit;cursor:pointer}
+#quizApp header{
+  display:flex;justify-content:space-between;
+  border-bottom:1px solid #ffffff25;padding-bottom:15px;
+}
+#quizApp .brand{font-size:19px;font-weight:900;direction:ltr}
+#quizApp .brand span{color:#9b9fff}
+#quizApp .online{color:#45d69b;font-size:11px}
+#quizApp .screen{display:none;padding-top:22px}
+#quizApp .screen.active{display:block;animation:show .3s}
+@keyframes show{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#quizApp .hero{text-align:center;font-size:65px;margin:12px}
+#quizApp h1{text-align:center;font-size:27px;line-height:1.6;margin:8px}
+#quizApp h1 span{color:#a1a6ff}
+#quizApp p{text-align:center;color:#aebbd8;font-size:13px;line-height:2}
+#quizApp .player-box,#quizApp .result-card{
+  background:#273455;padding:16px;border-radius:17px;margin:16px 0;
+  border:1px solid #ffffff20;
+}
+#quizApp .player-box h3{text-align:center;margin-top:0}
+#quizApp input{
+  width:100%;padding:13px;margin:6px 0;
+  background:#141d36;border:1px solid #596b9c;
+  border-radius:11px;color:white;font-family:inherit;
+}
+#quizApp .label{margin:20px 0 10px;font-weight:bold}
+#quizApp .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#quizApp .level{
+  background:#283553;color:white;border:1px solid #ffffff25;
+  border-radius:12px;padding:12px 3px;
+}
+#quizApp .level.selected{border:2px solid #a1a6ff;background:#394779}
+#quizApp .level b,#quizApp .level small{display:block}
+#quizApp .level small{font-size:10px;color:#aebbd8}
+#quizApp .primary{
+  width:100%;padding:14px;margin-top:15px;
+  border:0;border-radius:13px;color:white;
+  font-weight:900;font-size:15px;
+  background:linear-gradient(110deg,#6377ff,#a04de1);
+}
+#quizApp .primary:active{transform:scale(.98)}
+#quizApp button:disabled{opacity:.4}
+#quizApp .features{display:flex;justify-content:space-around;font-size:11px;color:#aebbd8;margin:20px 0}
+#quizApp .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+#quizApp .stat{background:#283553;padding:10px 3px;border-radius:12px;text-align:center}
+#quizApp .stat small,#quizApp .stat strong{display:block}
+#quizApp .stat small{font-size:10px;color:#aebbd8}
+#quizApp .stat strong{color:#a1a6ff}
+#quizApp .turn{
+  background:#384778;padding:12px;border-radius:12px;
+  text-align:center;margin:12px 0;font-weight:bold;color:#fff;
+}
+#quizApp .scoreboard{display:flex;gap:8px;margin:10px 0}
+#quizApp .scoreboard div{
+  flex:1;background:#1c2846;padding:9px;
+  border-radius:10px;text-align:center;font-size:12px;
+}
+#quizApp .progress{height:7px;background:#34405f;border-radius:20px;overflow:hidden;margin:15px 0}
+#quizApp #bar{height:100%;width:0;background:linear-gradient(90deg,#6678ff,#d26be9);transition:.3s}
+#quizApp .timer{
+  display:flex;justify-content:space-between;align-items:center;
+  background:#283553;padding:12px 17px;border-radius:13px;margin:15px 0;
+}
+#quizApp #clock{font-size:25px;color:#ffdc75}
+#quizApp .question{background:#303d67;padding:18px;border-radius:15px;text-align:center}
+#quizApp .question small{color:#bac5e5}
+#quizApp #question{font-size:19px;line-height:1.8}
+#quizApp .answers{display:grid;gap:9px;margin-top:12px}
+#quizApp .answer{
+  padding:13px;border-radius:12px;
+  background:#273553;color:white;
+  border:1px solid #ffffff25;text-align:right;font-size:14px;
+}
+#quizApp .answer.correct{background:#16533e;border-color:#45d69b}
+#quizApp .answer.wrong{background:#672c40;border-color:#ff718c}
+#quizApp #feedback{text-align:center;min-height:35px;padding:10px;font-weight:bold}
+#quizApp .actions{display:flex;gap:10px}
+#quizApp .actions button{flex:1}
+#quizApp .skip{background:#35415f;color:white;border:0;border-radius:12px;padding:12px}
+#quizApp .result-card{text-align:center;border-color:#7584db}
+#quizApp #finalScore{font-size:53px;font-weight:900;color:#aab3ff}
+#quizApp .result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#quizApp .result-grid div{background:#283553;border-radius:12px;padding:12px 3px;text-align:center}
+#quizApp .result-grid strong,#quizApp .result-grid small{display:block}
+#quizApp .result-grid strong{font-size:22px;color:#aab3ff}
+#quizApp .result-grid small{font-size:10px;color:#aebbd8}
+#quizApp .winner-box{background:#303d67;padding:15px;border-radius:15px;margin:15px 0;text-align:center}
+#quizApp .cat{display:none;width:220px;max-width:100%;border-radius:18px;margin:15px auto}
+#quizApp .homeBtn{width:100%;padding:13px;background:none;color:#aebbd8;border:0}
+#quizApp footer{text-align:center;margin-top:25px;padding-top:15px;border-top:1px solid #ffffff20;color:#7785ac;font-size:10px;direction:ltr}
+</style>
+
+<header>
+  <div class="brand">⚡ QUIZ<span>MASTER PRO</span></div>
+  <div class="online">● ONLINE GAME</div>
+</header>
+
+<section id="home" class="screen active">
+  <div class="hero">🧠</div>
+  <h1>تحدي الذكاء<br><span>QUIZ MASTER</span></h1>
+  <p>هل تستطيع الفوز على منافسك؟ أثبت ذكاءك!</p>
+
+  <div class="player-box">
+    <h3>👥 المتسابقون</h3>
+    <input id="player1" placeholder="اسم اللاعب الأول">
+    <input id="player2" placeholder="اسم اللاعب الثاني">
+  </div>
+
+  <div class="label">اختر مستوى الصعوبة</div>
+  <div class="levels">
+    <button class="level selected" data-level="easy">🟢<b>سهل</b><small>مبتدئ</small></button>
+    <button class="level" data-level="medium">🟡<b>متوسط</b><small>تحدي</small></button>
+    <button class="level" data-level="hard">🔴<b>صعب</b><small>محترف</small></button>
+  </div>
+
+  <div class="features">
+    <span>❓ 10 أسئلة</span>
+    <span>⏱️ 15 ثانية</span>
+    <span>🏆 100 نقطة</span>
+  </div>
+  <button class="primary" id="start">ابدأ التحدي 🚀</button>
+</section>
+
+<section id="game" class="screen">
+  <div class="turn" id="playerTurn">دور اللاعب الأول 🎮</div>
+
+  <div class="scoreboard">
+    <div id="score1">اللاعب 1: 0</div>
+    <div id="score2">اللاعب 2: 0</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><small>السؤال</small><strong id="count">1/10</strong></div>
+    <div class="stat"><small>النقاط الإجمالية</small><strong id="points">0</strong></div>
+    <div class="stat"><small>المستوى</small><strong id="levelText">سهل</strong></div>
+  </div>
+
+  <div class="progress"><div id="bar"></div></div>
+
+  <div class="timer">
+    <div>⏳ الوقت المتبقي</div>
+    <strong id="clock">15</strong>
+  </div>
+
+  <div class="question">
+    <small>❔ اختر الإجابة الصحيحة</small>
+    <h2 id="question">السؤال</h2>
+  </div>
+
+  <div class="answers" id="answers"></div>
+  <div id="feedback"></div>
+
+  <div class="actions">
+    <button class="skip" id="skip">تخطي ⏭</button>
+    <button class="primary" id="next" disabled>التالي ←</button>
+  </div>
+</section>
+
+<section id="result" class="screen">
+  <div class="hero" id="medal">🏆</div>
+  <h1 id="resultTitle">أحسنت!</h1>
+  <p id="resultMessage"></p>
+
+  <div class="result-card">
+    <small>مجموع نقاط اللاعبين</small>
+    <div id="finalScore">0</div>
+    <small id="percentage">0%</small>
+  </div>
+
+  <div class="winner-box" id="winnerBox"></div>
+
+  <div class="result-grid">
+    <div><strong id="correct">0</strong><small>صحيحة ✅</small></div>
+    <div><strong id="wrong">0</strong><small>خاطئة ❌</small></div>
+    <div><strong id="skipped">0</strong><small>متخطاة ⏭</small></div>
+  </div>
+
+  <img class="cat" id="catResult"
+  src="https://cataas.com/cat"
+  alt="قط يضحك">
+
+  <button class="primary" id="replay">إعادة التحدي 🔄</button>
+  <button class="homeBtn" id="homeBtn">الرئيسية</button>
+</section>
+
+<footer>QUIZ MASTER PRO • 2026</footer>
 </div>
 
 <script>
 (() => {
-  const data = {
-    easy: [
-      ["ما عاصمة الجزائر؟",["وهران","الجزائر","عنابة","قسنطينة"],1],
-      ["كم عدد أيام الأسبوع؟",["5","6","7","8"],2],
-      ["ما الكوكب الأحمر؟",["المريخ","الأرض","زحل","الزهرة"],0],
-      ["كم يساوي 8 × 7؟",["54","56","64","48"],1],
-      ["ما أكبر حيوان بري؟",["الأسد","الفيل","الذئب","الحصان"],1],
-      ["ما لغة البرازيل الرسمية؟",["الإنجليزية","الإسبانية","البرتغالية","الفرنسية"],2],
-      ["كم ضلعاً للمثلث؟",["2","3","4","5"],1],
-      ["ما عاصمة فرنسا؟",["روما","مدريد","باريس","برلين"],2],
-      ["ما سفينة الصحراء؟",["الجمل","الحصان","الفيل","الأسد"],0],
-      ["كم عدد ألوان قوس قزح؟",["5","6","7","8"],2]
-    ],
-    medium: [
-      ["ما عاصمة اليابان؟",["بكين","طوكيو","سيول","بانكوك"],1],
-      ["كم عظمة في جسم الإنسان البالغ تقريباً؟",["106","206","306","406"],1],
-      ["من رسم الموناليزا؟",["بيكاسو","فان غوخ","دافنشي","مونيه"],2],
-      ["ما أسرع حيوان بري؟",["الأسد","الفهد","النمر","الحصان"],1],
-      ["في أي قارة تقع مصر؟",["آسيا","أوروبا","إفريقيا","أمريكا"],2],
-      ["ما رمز الأكسجين؟",["Au","Ag","O","Fe"],2],
-      ["ما أكبر محيط؟",["الأطلسي","الهندي","الهادئ","المتجمد"],2],
-      ["من كتب البؤساء؟",["فيكتور هوغو","شكسبير","تولستوي","ديكنز"],0],
-      ["ما عاصمة تركيا؟",["إسطنبول","أنقرة","إزمير","بورصة"],1],
-      ["كم عدد ألوان قوس قزح؟",["5","6","7","8"],2]
-    ],
-    hard: [
-      ["ما أصغر دولة في العالم؟",["موناكو","الفاتيكان","مالطا","لوكسمبورغ"],1],
-      ["ما رمز الذهب؟",["Ag","Au","Cu","Fe"],1],
-      ["كم عدد كروموسومات الإنسان عادة؟",["42","44","46","48"],2],
-      ["ما أعمق نقطة في المحيطات؟",["خندق ماريانا","البحر الأحمر","بحر العرب","خليج المكسيك"],0],
-      ["من صاحب نظرية النسبية؟",["نيوتن","أينشتاين","غاليليو","داروين"],1],
-      ["ما عاصمة أستراليا؟",["سيدني","ملبورن","كانبيرا","بيرث"],2],
-      ["ما أكبر قمر في المجموعة الشمسية؟",["القمر","تيتان","غانيميد","أوروبا"],2],
-      ["متى انتهت الحرب العالمية الثانية؟",["1943","1944","1945","1946"],2],
-      ["ما وحدة قياس المقاومة؟",["الفولت","الأمبير","الأوم","الواط"],2],
-      ["ما أكثر عنصر وفرة في الكون؟",["الأكسجين","الهيدروجين","الكربون","الحديد"],1]
-    ]
-  };
+const app = document.getElementById("quizApp");
+const $ = id => app.querySelector("#"+id);
 
-  const $ = id => document.getElementById(id);
-  let level = "easy";
-  let questions = [];
-  let index = 0, score = 0, good = 0, bad = 0, skip = 0;
-  let time = 15, timer = null, answered = false;
+const data = {
+easy:[
+["ما عاصمة الجزائر؟",["وهران","الجزائر","عنابة","قسنطينة"],1],
+["كم عدد أيام الأسبوع؟",["5","6","7","8"],2],
+["ما الكوكب الأحمر؟",["المريخ","الأرض","زحل","الزهرة"],0],
+["كم يساوي 8 × 7؟",["54","56","64","48"],1],
+["ما أكبر حيوان بري؟",["الأسد","الفيل","الذئب","الحصان"],1],
+["ما لغة البرازيل الرسمية؟",["الإنجليزية","الإسبانية","البرتغالية","الفرنسية"],2],
+["كم ضلعاً للمثلث؟",["2","3","4","5"],1],
+["ما عاصمة فرنسا؟",["روما","مدريد","باريس","برلين"],2],
+["ما سفينة الصحراء؟",["الجمل","الحصان","الفيل","الأسد"],0],
+["كم عدد ألوان قوس قزح؟",["5","6","7","8"],2]
+],
+medium:[
+["ما عاصمة اليابان؟",["بكين","طوكيو","سيول","بانكوك"],1],
+["كم عظمة في جسم الإنسان البالغ تقريباً؟",["106","206","306","406"],1],
+["من رسم الموناليزا؟",["بيكاسو","فان غوخ","دافنشي","مونيه"],2],
+["ما أسرع حيوان بري؟",["الأسد","الفهد","النمر","الحصان"],1],
+["في أي قارة تقع مصر؟",["آسيا","أوروبا","إفريقيا","أمريكا"],2],
+["ما رمز الأكسجين؟",["Au","Ag","O","Fe"],2],
+["ما أكبر محيط؟",["الأطلسي","الهندي","الهادئ","المتجمد"],2],
+["من كتب البؤساء؟",["فيكتور هوغو","شكسبير","تولستوي","ديكنز"],0],
+["ما عاصمة تركيا؟",["إسطنبول","أنقرة","إزمير","بورصة"],1],
+["كم عدد ألوان قوس قزح؟",["5","6","7","8"],2]
+],
+hard:[
+["ما أصغر دولة في العالم؟",["موناكو","الفاتيكان","مالطا","لوكسمبورغ"],1],
+["ما رمز الذهب؟",["Ag","Au","Cu","Fe"],1],
+["كم عدد كروموسومات الإنسان عادة؟",["42","44","46","48"],2],
+["ما أعمق نقطة في المحيطات؟",["خندق ماريانا","البحر الأحمر","بحر العرب","خليج المكسيك"],0],
+["من صاحب نظرية النسبية؟",["نيوتن","أينشتاين","غاليليو","داروين"],1],
+["ما عاصمة أستراليا؟",["سيدني","ملبورن","كانبيرا","بيرث"],2],
+["ما أكبر قمر في المجموعة الشمسية؟",["القمر","تيتان","غانيميد","أوروبا"],2],
+["متى انتهت الحرب العالمية الثانية؟",["1943","1944","1945","1946"],2],
+["ما وحدة قياس المقاومة؟",["الفولت","الأمبير","الأوم","الواط"],2],
+["ما أكثر عنصر وفرة في الكون؟",["الأكسجين","الهيدروجين","الكربون","الحديد"],1]
+]
+};
 
-  function screen(id) {
-    document.querySelectorAll("#quizApp .screen").forEach(s => {
-      s.classList.remove("active");
-    });
-    $(id).classList.add("active");
-  }
+let level="easy",questions=[],index=0;
+let score=0,good=0,bad=0,skipped=0;
+let time=15,timer=null,answered=false;
+let names=["اللاعب الأول","اللاعب الثاني"];
+let scores=[0,0],currentPlayer=0;
+let audioContext=null;
 
-  document.querySelectorAll("#quizApp .level").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#quizApp .level").forEach(b =>
-        b.classList.remove("selected")
-      );
-      btn.classList.add("selected");
-      level = btn.dataset.level;
-    });
+function sound(type){
+  try{
+    audioContext=audioContext||new (window.AudioContext||window.webkitAudioContext)();
+    if(audioContext.state==="suspended") audioContext.resume();
+    const osc=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+    osc.type="sine";
+    osc.frequency.value=type==="correct"?850:type==="wrong"?180:650;
+    gain.gain.setValueAtTime(0.08,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,audioContext.currentTime+0.35);
+    osc.start();
+    osc.stop(audioContext.currentTime+0.35);
+  }catch(e){}
+}
+
+function screen(id){
+  app.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $(id).classList.add("active");
+}
+
+function updateScores(){
+  $("score1").textContent=names[0]+": "+scores[0];
+  $("score2").textContent=names[1]+": "+scores[1];
+  $("points").textContent=score;
+}
+
+app.querySelectorAll(".level").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    app.querySelectorAll(".level").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    level=btn.dataset.level;
+  });
+});
+
+function start(){
+  clearInterval(timer);
+  names=[
+    $("player1").value.trim()||"اللاعب الأول",
+    $("player2").value.trim()||"اللاعب الثاني"
+  ];
+  questions=[...data[level]];
+  index=score=good=bad=skipped=0;
+  scores=[0,0];
+  currentPlayer=0;
+  $("levelText").textContent={easy:"سهل",medium:"متوسط",hard:"صعب"}[level];
+  screen("game");
+  showQuestion();
+}
+
+function showQuestion(){
+  clearInterval(timer);
+  answered=false;
+  time=15;
+  const q=questions[index];
+
+  $("playerTurn").textContent="🎮 دور: "+names[currentPlayer];
+  $("count").textContent=(index+1)+"/10";
+  $("question").textContent=q[0];
+  $("clock").textContent=time;
+  $("bar").style.width=(index/10*100)+"%";
+  $("feedback").textContent="";
+  $("next").disabled=true;
+  $("skip").disabled=false;
+  $("next").textContent=index===9?"النتيجة 🏆":"التالي ←";
+  $("answers").innerHTML="";
+  updateScores();
+
+  q[1].forEach((answer,i)=>{
+    const b=document.createElement("button");
+    b.className="answer";
+    b.textContent=answer;
+    b.addEventListener("click",()=>check(i,b));
+    $("answers").appendChild(b);
   });
 
-  function start() {
-    clearInterval(timer);
-    questions = [...data[level]];
-    index = score = good = bad = skip = 0;
-    $("levelText").textContent =
-      {easy:"سهل",medium:"متوسط",hard:"صعب"}[level];
-    screen("game");
-    showQuestion();
-  }
-
-  function showQuestion() {
-    clearInterval(timer);
-    answered = false;
-    time = 15;
-
-    const q = questions[index];
-    $("count").textContent = `${index+1}/10`;
-    $("points").textContent = score;
-    $("question").textContent = q[0];
-    $("clock").textContent = time;
-    $("bar").style.width = (index / 10 * 100) + "%";
-    $("feedback").textContent = "";
-    $("next").disabled = true;
-    $("skip").disabled = false;
-    $("next").textContent = index === 9 ? "النتيجة 🏆" : "التالي ←";
-
-    $("answers").innerHTML = "";
-
-    q[1].forEach((answer,i) => {
-      const b = document.createElement("button");
-      b.className = "answer";
-      b.textContent = answer;
-      b.addEventListener("click", () => check(i,b));
-      $("answers").appendChild(b);
-    });
-
-    timer = setInterval(() => {
-      time--;
-      $("clock").textContent = time;
-
-      if(time <= 5) $("clock").style.color = "#ff718c";
-
-      if(time <= 0) {
-        clearInterval(timer);
-        finishAnswer("timeout");
-      }
-    },1000);
-    $("clock").style.color = "#ffdc75";
-  }
-
-  function check(choice, button) {
-    if(answered) return;
-    const right = questions[index][2];
-    if(choice === right) {
-      good++;
-      score += 100;
-      finishAnswer("correct");
-    } else {
-      bad++;
-      finishAnswer("wrong",button);
+  $("clock").style.color="#ffdc75";
+  timer=setInterval(()=>{
+    time--;
+    $("clock").textContent=time;
+    if(time<=5)$("clock").style.color="#ff718c";
+    if(time<=0){
+      clearInterval(timer);
+      finishAnswer("timeout");
     }
+  },1000);
+}
+
+function check(choice,button){
+  if(answered)return;
+  if(choice===questions[index][2]){
+    good++;
+    score+=100;
+    scores[currentPlayer]+=100;
+    finishAnswer("correct");
+  }else{
+    bad++;
+    finishAnswer("wrong",button);
   }
+}
 
-  function finishAnswer(type, button) {
-    if(answered) return;
-    answered = true;
-    clearInterval(timer);
+function finishAnswer(type,button){
+  if(answered)return;
+  answered=true;
+  clearInterval(timer);
+  const right=questions[index][2];
+  const buttons=$("answers").querySelectorAll("button");
 
-    const right = questions[index][2];
-    const buttons = $("answers").querySelectorAll("button");
-
-    buttons.forEach((b,i) => {
-      b.disabled = true;
-      if(i === right) b.classList.add("correct");
-    });
-
-    if(type === "correct") {
-      $("feedback").textContent = "🎉 إجابة صحيحة! +100 نقطة";
-      $("feedback").style.color = "#45d69b";
-    } else if(type === "wrong") {
-      button.classList.add("wrong");
-      $("feedback").textContent = "❌ إجابة خاطئة!";
-      $("feedback").style.color = "#ff718c";
-    } else if(type === "timeout") {
-      bad++;
-      $("feedback").textContent = "⏰ انتهى الوقت!";
-      $("feedback").style.color = "#ff718c";
-    } else {
-      $("feedback").textContent = "⏭️ تم تخطي السؤال";
-      $("feedback").style.color = "#ffdc75";
-    }
-
-    $("points").textContent = score;
-    $("next").disabled = false;
-    $("skip").disabled = true;
-  }
-
-  function next() {
-    if(!answered) return;
-    index++;
-    if(index < questions.length) showQuestion();
-    else endGame();
-  }
-
-  function endGame() {
-    clearInterval(timer);
-    const percent = Math.round(good / 10 * 100);
-
-    $("finalScore").textContent = score;
-    $("percentage").textContent = percent + "% إجابات صحيحة";
-    $("correct").textContent = good;
-    $("wrong").textContent = bad;
-    $("skipped").textContent = skip;
-    $("bar").style.width = "100%";
-
-    if(percent === 100) {
-      $("medal").textContent = "👑";
-      $("resultTitle").textContent = "أسطورة المسابقات!";
-      $("resultMessage").textContent = "كل إجاباتك صحيحة، أداء مذهل!";
-    } else if(percent >= 70) {
-      $("medal").textContent = "🏆";
-      $("resultTitle").textContent = "ممتاز جداً!";
-      $("resultMessage").textContent = "أداء رائع، أنت بطل التحدي!";
-    } else if(percent >= 40) {
-      $("medal").textContent = "🥈";
-      $("resultTitle").textContent = "عمل جيد!";
-      $("resultMessage").textContent = "واصل التدريب وستصبح أفضل!";
-    } else {
-      $("medal").textContent = "💪";
-      $("resultTitle").textContent = "لا تستسلم!";
-      $("resultMessage").textContent = "حاول مجدداً لتحصل على نتيجة أفضل.";
-    }
-
-    screen("result");
-  }
-
-  $("start").addEventListener("click",start);
-  $("next").addEventListener("click",next);
-
-  $("skip").addEventListener("click",() => {
-    if(!answered) {
-      skip++;
-      finishAnswer("skip");
-    }
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===right)b.classList.add("correct");
   });
 
-  $("replay").addEventListener("click",start);
+  if(type==="correct"){
+    sound("correct");
+    $("feedback").textContent="🎉 إجابة صحيحة! +100 نقطة";
+    $("feedback").style.color="#45d69b";
+  }else if(type==="wrong"){
+    sound("wrong");
+    button.classList.add("wrong");
+    $("feedback").textContent="❌ إجابة خاطئة!";
+    $("feedback").style.color="#ff718c";
+  }else if(type==="timeout"){
+    bad++;
+    sound("wrong");
+    $("feedback").textContent="⏰ انتهى الوقت!";
+    $("feedback").style.color="#ff718c";
+  }else{
+    skipped++;
+    $("feedback").textContent="⏭️ تم تخطي السؤال";
+    $("feedback").style.color="#ffdc75";
+  }
 
-  $("homeBtn").addEventListener("click",() => {
-    clearInterval(timer);
-    screen("home");
-  });
+  updateScores();
+  $("next").disabled=false;
+  $("skip").disabled=true;
+}
+
+function next(){
+  if(!answered)return;
+  currentPlayer=1-currentPlayer;
+  index++;
+  if(index<questions.length)showQuestion();
+  else endGame();
+}
+
+function endGame(){
+  clearInterval(timer);
+  const percent=Math.round(good/10*100);
+  $("finalScore").textContent=score;
+  $("percentage").textContent=percent+"% إجابات صحيحة";
+  $("correct").textContent=good;
+  $("wrong").textContent=bad;
+  $("skipped").textContent=skipped;
+  $("bar").style.width="100%";
+
+  const winner=scores[0]===scores[1]?-1:(scores[0]>scores[1]?0:1);
+
+  if(winner===-1){
+    $("medal").textContent="🤝";
+    $("resultTitle").textContent="تعادل!";
+    $("winnerBox").textContent="نتيجة رائعة! اللاعبان متعادلان.";
+  }else{
+    $("medal").textContent="🏆";
+    $("resultTitle").textContent="الفائز هو "+names[winner]+"!";
+    $("winnerBox").innerHTML=
+      "🥇 "+names[winner]+" : "+scores[winner]+" نقطة<br><br>"+
+      "🥈 "+names[1-winner]+" : "+scores[1-winner]+" نقطة";
+  }
+
+  if(percent===100){
+    $("resultMessage").textContent="أسطورة المسابقات! كل الإجابات صحيحة!";
+  }else if(percent>=70){
+    $("resultMessage").textContent="ممتاز جداً! أداء رائع!";
+  }else if(percent>=40){
+    $("resultMessage").textContent="عمل جيد! واصل التدريب!";
+  }else{
+    $("resultMessage").textContent="😂 يبدو أن القط فاز بالتحدي!";
+  }
+
+  $("catResult").style.display=percent<40?"block":"none";
+  if(winner!==-1)sound("win");
+  screen("result");
+}
+
+$("start").addEventListener("click",start);
+$("next").addEventListener("click",next);
+
+$("skip").addEventListener("click",()=>{
+  if(!answered)finishAnswer("skip");
+});
+
+$("replay").addEventListener("click",start);
+
+$("homeBtn").addEventListener("click",()=>{
+  clearInterval(timer);
+  screen("home");
+});
 })();
 </script>
-</div>
